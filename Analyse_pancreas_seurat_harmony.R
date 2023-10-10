@@ -183,31 +183,17 @@ DimPlot(pancreas_HAR, label=F, group.by="orig.ident", cells.highlight= list(norm
 
 FeaturePlot(pancreas_HAR, features = c("EPCAM", "AMBP", "MUC1", "COL1A1","PECAM1","RGS5","AIF1","MS4A1","CD3D"))
 VlnPlot(pancreas_HAR, features = c("EPCAM", "AMBP", "MUC1", "COL1A1","PECAM1","RGS5","AIF1","MS4A1","CD3D"))
-#Top markers for each cluster in an unbiased way
-FeaturePlot(pancreas_HAR, features = c("TFF1", "LUM","TYROBP", "CLDN5", "TOP2A","JCHAIN","PRSS2","RGS5","TTR","TPSB2","S100B","BMX"))
 #Canonical markers I found in the markers list
-FeaturePlot(pancreas_HAR, features = c("KRT19", "AMBP","COL1A1", "ESAM", "CD3D","PRSS1","RGS5","GCG"))
+FeaturePlot(pancreas_HAR, features = c("KRT19", "SOX9","AMBP","COL1A1", "ESAM", "CD3D","PRSS1","RGS5","GCG"))
 new.cluster.ids <- c("Duct cells", "Mesenchyme/Fibroblasts", "2", "Endothelial cells","4", "T-lymphocytes","Acinar", "Pancreatic Stellate cells", "Alpha cells","9","10","11")
 names(new.cluster.ids) <- levels(pancreas_HAR)
 pancreas_HAR <- RenameIdents(pancreas_HAR, new.cluster.ids)
 DimPlot(pancreas_HAR, label = TRUE, pt.size = 0.5) + NoLegend()
 
-#Now I will do differential gene expression analysis between tumor and normal 
-#samples within each cluster assuming its the same as celltype
+#Now I will do differential gene expression analysis between tumor and normal within duct cell cluster (cluster 0)
 pancreas_HAR$cluster.cond <- paste(pancreas_HAR$seurat_clusters, pancreas_HAR$condition, sep = "_")
 Idents(pancreas_HAR) <- "cluster.cond"
 top10_tum_norm_pos_clust0<- head(FindMarkers(pancreas_HAR, ident.1 = "0_Tumor", ident.2 = "0_Normal",only.pos = TRUE, verbose = FALSE,features=top8000),10)
-top10_tum_norm_pos_clust1<- head(FindMarkers(pancreas_HAR, ident.1 = "1_Tumor", ident.2 = "1_Normal",only.pos = TRUE, verbose = FALSE,features=top8000),10)
-top10_tum_norm_pos_clust2<- head(FindMarkers(pancreas_HAR, ident.1 = "2_Tumor", ident.2 = "2_Normal",only.pos = TRUE, verbose = FALSE,features=top8000),10)
-top10_tum_norm_pos_clust3<- head(FindMarkers(pancreas_HAR, ident.1 = "3_Tumor", ident.2 = "3_Normal",only.pos = TRUE, verbose = FALSE,features=top8000),10)
-top10_tum_norm_pos_clust4<- head(FindMarkers(pancreas_HAR, ident.1 = "4_Tumor", ident.2 = "4_Normal",only.pos = TRUE, verbose = FALSE,features=top8000),10)
-top10_tum_norm_pos_clust5<- head(FindMarkers(pancreas_HAR, ident.1 = "5_Tumor", ident.2 = "5_Normal",only.pos = TRUE, verbose = FALSE,features=top8000),10)
-top10_tum_norm_pos_clust6<- head(FindMarkers(pancreas_HAR, ident.1 = "6_Tumor", ident.2 = "6_Normal",only.pos = TRUE, verbose = FALSE,features=top8000),10)
-top10_tum_norm_pos_clust7<- head(FindMarkers(pancreas_HAR, ident.1 = "7_Tumor", ident.2 = "7_Normal",only.pos = TRUE, verbose = FALSE,features=top8000),10)
-top10_tum_norm_pos_clust8<- head(FindMarkers(pancreas_HAR, ident.1 = "8_Tumor", ident.2 = "8_Normal",only.pos = TRUE, verbose = FALSE,features=top8000),10)
-top10_tum_norm_pos_clust9<- head(FindMarkers(pancreas_HAR, ident.1 = "9_Tumor", ident.2 = "9_Normal",only.pos = TRUE, verbose = FALSE,features=top8000),10)
-top10_tum_norm_pos_clust10<- head(FindMarkers(pancreas_HAR, ident.1 = "10_Tumor", ident.2 = "10_Normal",only.pos = TRUE, verbose = FALSE,features=top8000),10)
-top10_tum_norm_pos_clust11<- head(FindMarkers(pancreas_HAR, ident.1 = "11_Tumor", ident.2 = "11_Normal",only.pos = TRUE, verbose = FALSE,features=top8000),10)
 
 VlnPlot(pancreas_HAR, features <- c('ATP5J2','TFF3'), idents = c("0_Tumor", "0_Normal"), group.by = "condition") 
 #Doing pseudo bulking
